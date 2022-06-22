@@ -1,0 +1,55 @@
+<!doctype html>
+<html>
+
+<script>
+// for legacy browsers
+const AudioContext = window.AudioContext || window.webkitAudioContext;
+const audioContext = new AudioContext();
+</script>
+
+<!-- <audio src="3_ships.mid.mp3">
+</audio> -->
+
+<audio crossorigin src="https://upload.wikimedia.org/wikipedia/commons/transcoded/e/e4/3_Ships.mid/3_Ships.mid.mp3">
+</audio>
+
+<script>
+// get the audio element
+const audioElement = document.querySelector('audio');
+// pass it into the audio context
+const track = audioContext.createMediaElementSource(audioElement);
+</script>
+
+<button data-playing="false" role="switch" aria-checked="false">
+<span>Play/Pause</span>
+</button>
+
+<script>
+track.connect(audioContext.destination);
+</script>
+
+<script>
+// select our play button
+const playButton = document.querySelector('button');
+playButton.addEventListener('click', function() {
+// check if context is in suspended state (autoplay policy)
+if (audioContext.state === 'suspended') {
+audioContext.resume();
+}
+// play or pause track depending on state
+if (this.dataset.playing === 'false') {
+audioElement.play();
+this.dataset.playing = 'true';
+} else if (this.dataset.playing === 'true') {
+audioElement.pause();
+this.dataset.playing = 'false';
+}
+}, false);
+audioElement.addEventListener('ended', () => {
+playButton.dataset.playing = 'false';
+}, false);
+</script>
+
+<a href="https://commons.wikimedia.org/wiki/File:3_Ships.mid">Yamahalion</a>, <a href="https://creativecommons.org/licenses/by-sa/3.0">CC BY-SA 3.0</a>, via Wikimedia Commons
+
+</html>
